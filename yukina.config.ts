@@ -8,7 +8,7 @@ const YukinaConfig: Configuration = {
 
   description: "Demo Site",
 
-  site: "https://tosui-roman.github.io",
+  site: "https://tosui-roman.github.io/homepage",
 
   locale: "en", // set for website language and date format
 
