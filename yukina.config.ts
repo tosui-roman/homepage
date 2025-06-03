@@ -10,7 +10,7 @@ const YukinaConfig: Configuration = {
 
   site: "https://tosui-roman.github.io",
 
-  locale: "en", // set for website language and date format
+  locale: "en", // set for website language and date format?
 
   navigators: [
     {
