@@ -8,7 +8,7 @@ const YukinaConfig: Configuration = {
 
   description: "Demo Site",
 
-  site: "https://yukina-blog.vercel.app",
+  site: "https://tosui-roman.github.io",
 
   locale: "en", // set for website language and date format
 
