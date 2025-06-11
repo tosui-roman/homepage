@@ -1,4 +1,0 @@
-
-User-agent: *
-Allow: /
-Sitemap: https://tosui-roman.github.io/sitemap-index.xml
