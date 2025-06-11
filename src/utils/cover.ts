@@ -7,7 +7,7 @@ import YukinaConfig from "../../yukina.config";
  * @param id - The unique identifier for the entry.
  * @returns The URL of the corresponding cover image.
  */
-export function GetCoverURLForUnspecifiedEntry(id: string): string {
+export function GetCoverURLForUnspecifiedEntry(id: string): ImageMetadata {
   const index = GetIndexFromSlugID(id, YukinaConfig.banners.length);
   return YukinaConfig.banners[index];
 }

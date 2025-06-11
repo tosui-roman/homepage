@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 
-import icon from "astro-icon";
+import icons from "astro-icon";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
@@ -22,7 +22,12 @@ export default defineConfig({
   integrations: [
     tailwind(),
     svelte(),
-    icon(),
+    icons({
+      collections: {
+        fa6brands: async () => (await import('@iconify-json/fa6-brands')).default,
+        simpleicons: async () => (await import('@iconify-json/simple-icons')).default,
+      },
+    }),
     swup({
       theme: false,
       containers: ["main", "footer", ".banner-inner"],

@@ -7,6 +7,7 @@ import { i18n } from "../locales/translation";
 import I18nKeys from "../locales/keys";
 import YukinaConfig from "../../yukina.config";
 import { formatDate } from "../utils/date";
+import { Image } from "astro:assets";
 
 export interface Props {
   id: string;
@@ -15,7 +16,7 @@ export interface Props {
   category?: string;
   tags?: string[];
   description?: string;
-  image?: string;
+  image?: ImageMetadata;
   readingMetadata: { time: number; wordCount: number };
 }
 
@@ -23,19 +24,29 @@ const props = Astro.props;
 const entryID = IdToSlug(props.id);
 const contentUrl = `/posts/${entryID}`;
 const { time, wordCount } = props.readingMetadata;
+
+let coverImage: ImageMetadata | string = GetCoverURLForUnspecifiedEntry(entryID);
+
+if (props.image) {
+  try {
+    const imported = await import(`../content${props.image}`);
+    coverImage = imported.default;
+  } catch (e) {
+    console.warn("Failed to import cover image from:", (`../content${props.image}`));
+  }
+}
 ---
 
 <div
   class="mx-3 flex flex-col rounded-3xl bg-[var(--card-color)] lg:mx-0 lg:h-[212px]"
 >
-  <a
-    href={contentUrl}
-    class="relative h-[128px] transition-all hover:brightness-75 lg:hidden"
-  >
-    <img
-      class="lozad absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
-      data-src={props.image ?? GetCoverURLForUnspecifiedEntry(entryID)}
+  <a href={contentUrl} class="relative h-[128px] transition-all hover:brightness-75 lg:hidden">
+    <Image
+      src={coverImage}
       alt="CoverPost"
+      class="absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
+      format="webp"
+      loading="lazy"
     />
     <div class="absolute bottom-2 w-full">
       <div class="mx-2 flex flex-row justify-between">
@@ -85,6 +96,8 @@ const { time, wordCount } = props.readingMetadata;
               {formatDate(props.published, YukinaConfig.locale)}
             </span>
           </li>
+
+          <!--
           {
             props.category && (
               <li class="data space-x-1.5">
@@ -98,6 +111,8 @@ const { time, wordCount } = props.readingMetadata;
               </li>
             )
           }
+          -->
+
           <li
             class="hidden items-center overflow-clip md:block lg:hidden xl:block"
           >
@@ -146,11 +161,21 @@ const { time, wordCount } = props.readingMetadata;
     <div class="cover-container">
       <a href={contentUrl} class="cover-wrapper">
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
-        <img
-          class="lozad h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
-          data-src={props.image ?? GetCoverURLForUnspecifiedEntry(entryID)}
-          alt="PostCover"
-        />
+        {
+          typeof coverImage === "string" ? (
+            <img
+              class="lozad h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
+              data-src={coverImage}
+              alt="PostCover"
+            />
+          ) : (
+            <Image
+              src={coverImage}
+              alt="PostCover"
+              class="h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
+            />
+          )
+        }
       </a>
     </div>
   </div>

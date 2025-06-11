@@ -1,0 +1,55 @@
+---
+import Main from '../layouts/MainLayout.astro';
+import { getImage } from 'astro:assets';
+import sakura1 from '../content/images/sakura_fran.jpg';
+import sakura2 from '../content/images/sakura_medicine.jpg';
+import sakura3 from '../content/images/sakura_meri.jpg';
+import sakura4 from '../content/images/sakura_okina.jpg';
+import sakura5 from '../content/images/sakura_renmeri.jpg';
+import sakura6 from '../content/images/sakura_sakuya.jpg';
+import sakura7 from '../content/images/sakura_yukari.jpg';
+import sakura8 from '../content/images/sakura_yukari2.jpg';
+import sakura9 from '../content/images/sakura_yukari3.jpg';
+import rein1 from '../content/images/rein_crownpiece.jpg';
+import rein2 from '../content/images/rein_eiki.jpg';
+import rein3 from '../content/images/rein_fran.jpg';
+import rein4 from '../content/images/rein_itirin.jpg';
+import rein5 from '../content/images/rein_misumaru.jpg';
+import rein6 from '../content/images/rein_nareko.jpg';
+import rein7 from '../content/images/rein_sagume.jpg';
+import rein8 from '../content/images/rein_saki.jpg';
+import rein9 from '../content/images/rein_sakuya.jpg';
+import rein10 from '../content/images/rein_sonbiten.jpg';
+import rein11 from '../content/images/rein_udon.jpg';
+import rein12 from '../content/images/rein_utsuho.jpg';
+import rein13 from '../content/images/rein_yatie.jpg';
+import rein14 from '../content/images/rein_yuma.jpg';
+
+// 表示する画像をリスト化
+const images = [sakura1, sakura2, sakura3, sakura4, sakura5, sakura6, sakura7, sakura8, sakura9, rein1, rein2, rein3, rein4, rein5, rein6, rein7, rein8, rein9, rein10, rein11, rein12, rein13, rein14];
+---
+
+<Main>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+    {await Promise.all(
+      images.map(async (img, i) => {
+        const optimized = await getImage({
+          src: img,
+          widths: [300, 600, 1200],
+          format: 'webp',
+        });
+        return (
+          <img
+            key={i}
+            src={optimized.src}
+            width={optimized.width}
+            height={optimized.height}
+            alt={`gallery-${i}`}
+            loading="lazy"
+            class="rounded shadow"
+          />
+        );
+      })
+    )}
+  </div>
+</Main>

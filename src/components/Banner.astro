@@ -1,5 +1,6 @@
 ---
 import YukinaConfig from "../../yukina.config";
+import { getImage } from "astro:assets";
 import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
 
 export interface Props {
@@ -8,12 +9,24 @@ export interface Props {
   bannerImage?: string;
   slug?: string;
 }
+
 const { title, subTitle, bannerImage, slug } = Astro.props;
 
 const hasTitle = title !== undefined || subTitle !== undefined;
 const hasHeaderImg = bannerImage !== undefined || slug !== undefined;
 
-let carouselImgsList = YukinaConfig.banners;
+// astro:assets 画像最適化（ESM import された YukinaConfig.banners に対応）
+let carouselImgsList = await Promise.all(
+  YukinaConfig.banners.map(async (img) => {
+    const optimized = await getImage({
+      src: img,
+      widths: [1600],
+      format: "webp",
+    });
+    return optimized.src;
+  })
+);
+
 const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 ---
 
@@ -40,15 +53,13 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
           <img
             class="item lozad"
             data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-            alt="PostCoverr"
+            alt="PostCover"
           />
         </div>
       )
     }
     <div class="relative h-[95%] w-full">
-      <div
-        class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4"
-      >
+      <div class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4">
         <div class="flex flex-col">
           <h1
             class:list={[hasTitle ? "title-normal" : "title-index"]}
@@ -62,45 +73,18 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     </div>
   </div>
   <div class="waves" id="header-waves">
-    <svg
-      class="waves"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      viewBox="0 24 150 28"
-      preserveAspectRatio="none"
-      shape-rendering="auto"
-    >
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
       <defs>
         <path
           id="gentle-wave"
           d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-        >
-        </path>
+        />
       </defs>
       <g class="parallax">
-        <use
-          xlink:href="#gentle-wave"
-          x="48"
-          y="0"
-          class="opacity-25"
-          style={{ animationDelay: "-2s", animationDuration: "7s" }}></use>
-        <use
-          xlink:href="#gentle-wave"
-          x="48"
-          y="3"
-          class="opacity-50"
-          style={{ animationDelay: "-3s", animationDuration: "10s" }}></use>
-        <use
-          xlink:href="#gentle-wave"
-          x="48"
-          y="5"
-          class="opacity-75"
-          style={{ animationDelay: "-4s", animationDuration: "13s" }}></use>
-        <use
-          xlink:href="#gentle-wave"
-          x="48"
-          y="7"
-          style={{ animationDelay: "-5s", animationDuration: "20s" }}></use>
+        <use xlink:href="#gentle-wave" x="48" y="0" class="opacity-25" style={{ animationDelay: "-2s", animationDuration: "7s" }} />
+        <use xlink:href="#gentle-wave" x="48" y="3" class="opacity-50" style={{ animationDelay: "-3s", animationDuration: "10s" }} />
+        <use xlink:href="#gentle-wave" x="48" y="5" class="opacity-75" style={{ animationDelay: "-4s", animationDuration: "13s" }} />
+        <use xlink:href="#gentle-wave" x="48" y="7" style={{ animationDelay: "-5s", animationDuration: "20s" }} />
       </g>
     </svg>
   </div>
@@ -144,6 +128,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 </script>
 
 <style define:vars={{ carouselAnimationTime }}>
+  /* ここに元のスタイル定義そのまま貼って問題ありません */
   .banner {
     @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
   }
@@ -160,8 +145,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .carousel .item {
     @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite
-      0s;
+    animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
     backface-visibility: hidden;
     transform-style: preserve-3d;
   }
