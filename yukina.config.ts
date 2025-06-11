@@ -1,11 +1,6 @@
 import I18nKeys from "./src/locales/keys";
 import type { Configuration } from "./src/types/config";
 
-import avataImage1 from "./src/content/images/sakura_meri.jpg";
-import avataImage2 from "./src/content/images/rein_yuma.jpg";
-import banner1 from "./src/content/banners/sakura_banner1.jpg";
-import banner2 from "./src/content/banners/rein_banner1.jpg";
-
 const YukinaConfig: Configuration = {
   title: "陶酔ロマン",
   subTitle: "同人サークル『陶酔ロマン』オフィシャルサイト",
@@ -38,7 +33,7 @@ const YukinaConfig: Configuration = {
 
   username1: "八雲 櫻",
   sign1: "サークル代表",
-  avatarImg1: avataImage1,
+  avatarImg1: "/image/gallery/sakura_meri.jpg",
   socialLinks1: [
     {
       icon: "fa6-brands:x-twitter",
@@ -52,7 +47,7 @@ const YukinaConfig: Configuration = {
 
   username2: "りーん10",
   sign2: "サイト管理者",
-  avatarImg2: avataImage2,
+  avatarImg2: "/image/gallery/rein_yuma.jpg",
   socialLinks2: [
     {
       icon: "fa6-brands:x-twitter",
@@ -69,7 +64,10 @@ const YukinaConfig: Configuration = {
   maxFooterCategoryChip: 6,
   maxFooterTagChip: 24,
 
-  banners: [banner1, banner2],
+  banners: [
+    "/image/banner/sakura_banner1.jpg",
+    "/image/banner/rein_banner1.jpg",
+  ],
 
   slugMode: "HASH", // 'RAW' | 'HASH'
 

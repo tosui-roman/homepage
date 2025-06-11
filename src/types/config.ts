@@ -15,12 +15,12 @@ interface Configuration {
 
   username1: string;
   sign1: string;
-  avatarImg1: ImageMetadata;
+  avatarImg1: string;
   socialLinks1: { icon: string; link: string }[];
 
   username2: string;
   sign2: string;
-  avatarImg2: ImageMetadata;
+  avatarImg2: string;
   socialLinks2: { icon: string; link: string }[];
 
   maxSidebarCategoryChip: number;
@@ -28,7 +28,7 @@ interface Configuration {
   maxFooterCategoryChip: number;
   maxFooterTagChip: number;
 
-  banners: ImageMetadata[];
+  banners: string[];
 
   slugMode: "HASH" | "RAW";
 

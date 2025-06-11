@@ -1,6 +1,5 @@
 ---
 import YukinaConfig from "../../yukina.config";
-import { getImage } from "astro:assets";
 import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
 
 export interface Props {
@@ -15,18 +14,8 @@ const { title, subTitle, bannerImage, slug } = Astro.props;
 const hasTitle = title !== undefined || subTitle !== undefined;
 const hasHeaderImg = bannerImage !== undefined || slug !== undefined;
 
-// astro:assets 画像最適化（ESM import された YukinaConfig.banners に対応）
-let carouselImgsList = await Promise.all(
-  YukinaConfig.banners.map(async (img) => {
-    const optimized = await getImage({
-      src: img,
-      widths: [1600],
-      format: "webp",
-    });
-    return optimized.src;
-  })
-);
-
+// 画像のURLはそのまま使う
+const carouselImgsList = YukinaConfig.banners;
 const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 ---
 
